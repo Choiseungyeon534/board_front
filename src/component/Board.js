@@ -52,9 +52,10 @@ function Board() {
             setBoards(res.data)
         })
     },[show])
-
+    console.log("테스트 커밋")
     return (
     <>
+    
       <Button variant="primary" onClick={handleShow}>
           게시글 작성하기
       </Button>
