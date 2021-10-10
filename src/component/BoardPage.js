@@ -8,10 +8,18 @@ function BoardPage() {
     const [boardData, setBoardData] = useState([])
     const [boardId, setBoardId] = useState(Number(params.boardId))
     const history = useHistory();
+    const [boardTime, setBoardTime] = useState('')
 
+    let timeString_KR = boardTime.toLocaleString("ko-KR", {timeZone: "Asia/Seoul"});
+    const writeDate = timeString_KR.split('오')[0]
+    const writeTime = String(String(boardTime).split(' ')[4]).substring(0,5)
+
+
+    
     useEffect(() => {
         axios.get(`/api/boardDetail/${boardId}`).then(res => {
             setBoardData(res.data)
+            setBoardTime(new Date(res.data[0].TIME))
         })
     }, [])
     
@@ -48,7 +56,7 @@ function BoardPage() {
     `;
     const HEADER = styled.div`
         display: grid;
-        grid-template-columns: 4fr 1fr;
+        grid-template-columns: 6fr 1fr;
         margin-left: 8px;
     `;
     const TIME = styled.div`
@@ -68,7 +76,8 @@ function BoardPage() {
                             <TITLE>{boardData[0].TITLE}</TITLE>
                             <HEADER>
                                 <div>{boardData[0].WRITER}</div>
-                                <TIME>{boardData[0].TIME}</TIME>
+                                <TIME>{writeDate} <span/>
+                                {writeTime}</TIME>
                             </HEADER>
                         </INFO>
                         <CONTENT>{boardData[0].CONTENT}</CONTENT>
