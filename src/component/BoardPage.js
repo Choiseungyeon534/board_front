@@ -64,7 +64,7 @@ function BoardPage() {
                 {boardData[0] && 
                     <div>
                         <INFO>
-                            <BACK onClick={backClick}>게시판 | 목록 > </BACK>
+                            <BACK onClick={backClick}>게시판 | 목록 &gt; </BACK>
                             <TITLE>{boardData[0].TITLE}</TITLE>
                             <HEADER>
                                 <div>{boardData[0].WRITER}</div>
@@ -72,7 +72,6 @@ function BoardPage() {
                             </HEADER>
                         </INFO>
                         <CONTENT>{boardData[0].CONTENT}</CONTENT>
-                        
                     </div>
                 }
             </Board>
