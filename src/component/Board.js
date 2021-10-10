@@ -13,6 +13,7 @@ function Board() {
     const [show, setShow] = useState(false);
     const [title,setTitle] = useState("");
     const [content,setContent] = useState("");
+    const [deleteStatus,setDeleteStatus] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -48,13 +49,23 @@ function Board() {
         axios.get('/api/board/allInfo').then(res => {
             setBoards(res.data)
         })
-    },[show])
+    },[show,deleteStatus])
     console.log("테스트 커밋")
 
+    const deleteApi = (boardId) => {
+      console.log(boardId,"boardId")
+      axios.get(`/api/boardDelete/${boardId}`).then(res => {
+        console.log(res.data)
+        if(res.data.status==="삭제성공") {
+          setDeleteStatus(!deleteStatus)
+        } else {
+          alert("데이터 삭제하는데 실패했다")
+        }
+      })
+    }
     
     return (
     <>
-    
       <Button variant="primary" onClick={handleShow}>
           게시글 작성하기
       </Button>
@@ -91,12 +102,15 @@ function Board() {
           </thead>
           <tbody>
             {boards.map((board) => (
+              <>
               <tr onClick={() => history.push(`/boardPage/${board.BOARD_ID}`)} key={board.BOARD_ID}>
                 <td>{board.BOARD_ID}</td>
                 <td>{board.TITLE}</td>
                 <td>{board.CONTENT}</td>
                 <td>{board.WRITER}</td>
               </tr>
+              <div style={{background:"blue"}} onClick={() => deleteApi(board.BOARD_ID)}>위 게시글 삭제하기</div>
+              </>
             ))}
           </tbody>
         </Table>
