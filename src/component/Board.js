@@ -1,12 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import Table from 'react-bootstrap/Table'
+import styled from 'styled-components'
 import { useHistory } from 'react-router';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'
@@ -26,7 +21,9 @@ function Board() {
     const handleTitle = (e) => setTitle(e.target.value);
     const handleContent = (e) => setContent(e.target.value);
 
-
+    const DIV = styled.div`
+    width: 1000px;
+    `;
 
     const saveWriter = () => {
       let body = {
@@ -53,6 +50,8 @@ function Board() {
         })
     },[show])
     console.log("테스트 커밋")
+
+    
     return (
     <>
     
@@ -80,33 +79,31 @@ function Board() {
           <Button onClick={saveWriter} variant="primary">작성 완료</Button>
         </Modal.Footer>
       </Modal>
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth:1000 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="center">게시판_id</TableCell>
-            <TableCell align="center">작성자</TableCell>
-            <TableCell align="center">제목</TableCell>
-            <TableCell align="center">내용</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {boards.map((row) => (
-            <TableRow onClick={() => history.push(`/boardPage/${row.BOARD_ID}`)}
-              key={row.BOARD_ID}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell align="center">{row.BOARD_ID}</TableCell>
-              <TableCell align="center">{row.WRITER}</TableCell>
-              <TableCell align="center">{row.TITLE}</TableCell>
-              <TableCell align="center">{row.CONTENT}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+      <DIV>
+        <Table striped hover size="xs" >
+          <thead>
+            <tr>
+              <th></th>
+              <th>제목</th>
+              <th>내용</th>
+              <th>작성자</th>
+            </tr>
+          </thead>
+          <tbody>
+            {boards.map((board) => (
+              <tr onClick={() => history.push(`/boardPage/${board.BOARD_ID}`)} key={board.BOARD_ID}>
+                <td>{board.BOARD_ID}</td>
+                <td>{board.TITLE}</td>
+                <td>{board.CONTENT}</td>
+                <td>{board.WRITER}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </DIV>
     </>
-    )
-}
+      )
+  }
 
 export default Board
+
