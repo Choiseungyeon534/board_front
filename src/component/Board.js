@@ -23,7 +23,8 @@ function Board() {
     const handleContent = (e) => setContent(e.target.value);
 
     const DIV = styled.div`
-    width: 1000px;
+      width: 1000px;
+      height: 75vh;
     `;
 
     const saveWriter = () => {
@@ -97,18 +98,20 @@ function Board() {
               <th>제목</th>
               <th>내용</th>
               <th>작성자</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            {boards.map((board) => (
+            {boards.map((board,index) => (
               <>
-              <tr onClick={() => history.push(`/boardPage/${board.BOARD_ID}`)} key={board.BOARD_ID}>
-                <td>{board.BOARD_ID}</td>
-                <td>{board.TITLE}</td>
-                <td>{board.CONTENT}</td>
-                <td>{board.WRITER}</td>
+              <tr>
+                <td onClick={() => history.push(`/boardPage/${board.BOARD_ID}`)} key={board.BOARD_ID}>{index+1}</td>
+                <td onClick={() => history.push(`/boardPage/${board.BOARD_ID}`)} key={board.BOARD_ID}>{board.TITLE}</td>
+                <td onClick={() => history.push(`/boardPage/${board.BOARD_ID}`)} key={board.BOARD_ID}>{board.CONTENT}</td>
+                <td onClick={() => history.push(`/boardPage/${board.BOARD_ID}`)} key={board.BOARD_ID}>{board.WRITER}</td>
+                <td style={{background:"blue" , color:"white"}} onClick={() => deleteApi(board.BOARD_ID)}>게시글 삭제하기</td>
               </tr>
-              <div style={{background:"blue"}} onClick={() => deleteApi(board.BOARD_ID)}>위 게시글 삭제하기</div>
+              {/* <div style={{background:"blue"}} onClick={() => deleteApi(board.BOARD_ID)}>위 게시글 삭제하기</div> */}
               </>
             ))}
           </tbody>
