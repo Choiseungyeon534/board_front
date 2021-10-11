@@ -50,7 +50,6 @@ function Board() {
             setBoards(res.data)
         })
     },[show,deleteStatus])
-    console.log("테스트 커밋")
 
     const deleteApi = (boardId) => {
       console.log(boardId,"boardId")
