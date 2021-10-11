@@ -52,10 +52,11 @@ function Board() {
         })
     },[show,deleteStatus])
 
-    const deleteApi = (boardId) => {
-      console.log(boardId,"boardId")
+    const deleteApi = (e, boardId) => {
+      e.stopPropagation()
       axios.get(`/api/boardDelete/${boardId}`).then(res => {
         console.log(res.data)
+
         if(res.data.status==="삭제성공") {
           setDeleteStatus(!deleteStatus)
         } else {
@@ -104,12 +105,12 @@ function Board() {
           <tbody>
             {boards.map((board,index) => (
               <>
-              <tr>
-                <td onClick={() => history.push(`/boardPage/${board.BOARD_ID}`)} key={board.BOARD_ID}>{index+1}</td>
-                <td onClick={() => history.push(`/boardPage/${board.BOARD_ID}`)} key={board.BOARD_ID}>{board.TITLE}</td>
-                <td onClick={() => history.push(`/boardPage/${board.BOARD_ID}`)} key={board.BOARD_ID}>{board.CONTENT}</td>
-                <td onClick={() => history.push(`/boardPage/${board.BOARD_ID}`)} key={board.BOARD_ID}>{board.WRITER}</td>
-                <td style={{background:"blue" , color:"white"}} onClick={() => deleteApi(board.BOARD_ID)}>게시글 삭제하기</td>
+              <tr onClick={() => history.push(`/boardPage/${board.BOARD_ID}`)} key={board.BOARD_ID}>
+                <td>{index+1}</td>
+                <td>{board.TITLE}</td>
+                <td>{board.CONTENT}</td>
+                <td>{board.WRITER}</td>
+                <td style={{background:"blue" , color:"white"}} onClick={(e) => deleteApi(e, board.BOARD_ID)}>위 게시글 삭제하기</td>
               </tr>
               {/* <div style={{background:"blue"}} onClick={() => deleteApi(board.BOARD_ID)}>위 게시글 삭제하기</div> */}
               </>
