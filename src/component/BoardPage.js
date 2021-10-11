@@ -5,10 +5,10 @@ import { useHistory, useParams } from 'react-router'
 import styled from 'styled-components'
 import Modal from 'react-bootstrap/Modal'
 import Input from './Input';
-
+import Comment from './Comment'
 const Board = styled.div`
     width: 888px;
-    height: 666px;
+    height: 333px;
     border-radius: 10px;
     border: 1px solid #EBECEF;
     margin: 20px;
@@ -52,6 +52,9 @@ const BOTTOM = styled.div`
     right: 10px;
 `;
 
+
+
+
 function BoardPage() {
     let params = useParams()
     const history = useHistory();
@@ -63,8 +66,7 @@ function BoardPage() {
     const [show, setShow] = useState(false);
     const [title,setTitle] = useState("");
     const [content,setContent] = useState("");
-
-
+   
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -77,13 +79,31 @@ function BoardPage() {
     let timeString_KR = boardTime.toLocaleString("ko-KR", {timeZone: "Asia/Seoul"});
     const writeDate = timeString_KR.split('오')[0]
     const writeTime = String(String(boardTime).split(' ')[4]).substring(0,5)
-    
+
+
+    // const [time, setTime] = useState("")
+    // useEffect(() => {
+    //     let today = new Date();
+    //     let year = today.getFullYear();
+    //     let month = today.getMonth() +1;
+    //     let date = today.getDate();
+    //     let hours = today.getHours(); 
+    //     let minutes = today.getMinutes(); 
+    //     let time = year+'.'+month+'.'+date+' '+hours+':'+minutes
+    //     setTime(time)
+    // },[commentSave])
+
+
+
+ 
+
     useEffect(() => {
         axios.get(`/api/boardDetail/${boardId}`).then(res => {
             setBoardData(res.data)
             setBoardTime(new Date(res.data[0].TIME))
         })
-    }, [editStatus])
+
+    }, [])
     
     const backClick = () => {
         history.go(-1)
@@ -117,8 +137,7 @@ function BoardPage() {
         })
     }
 
-    
-
+  
     return (
         <>
         <Modal
@@ -161,6 +180,8 @@ function BoardPage() {
                 <Button onClick={() => deleteApi(params.boardId)}>삭제</Button>
             </BOTTOM>
         </Board>
+        
+        <Comment boardId = {boardId}/>
         </>
     )
    

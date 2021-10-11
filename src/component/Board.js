@@ -56,7 +56,6 @@ function Board() {
       e.stopPropagation()
       axios.get(`/api/boardDelete/${boardId}`).then(res => {
         console.log(res.data)
-
         if(res.data.status==="삭제성공") {
           setDeleteStatus(!deleteStatus)
         } else {
@@ -110,7 +109,7 @@ function Board() {
                 <td>{board.TITLE}</td>
                 <td>{board.CONTENT}</td>
                 <td>{board.WRITER}</td>
-                <td style={{background:"blue" , color:"white"}} onClick={(e) => deleteApi(e, board.BOARD_ID)}>위 게시글 삭제하기</td>
+                <td style={{background:"#b5c7ed" , color:"white"}} onClick={(e) => deleteApi(e, board.BOARD_ID)}>게시글 삭제하기</td>
               </tr>
               {/* <div style={{background:"blue"}} onClick={() => deleteApi(board.BOARD_ID)}>위 게시글 삭제하기</div> */}
               </>
