@@ -80,23 +80,6 @@ function BoardPage() {
     const writeDate = timeString_KR.split('오')[0]
     const writeTime = String(String(boardTime).split(' ')[4]).substring(0,5)
 
-
-    // const [time, setTime] = useState("")
-    // useEffect(() => {
-    //     let today = new Date();
-    //     let year = today.getFullYear();
-    //     let month = today.getMonth() +1;
-    //     let date = today.getDate();
-    //     let hours = today.getHours(); 
-    //     let minutes = today.getMinutes(); 
-    //     let time = year+'.'+month+'.'+date+' '+hours+':'+minutes
-    //     setTime(time)
-    // },[commentSave])
-
-
-
- 
-
     useEffect(() => {
         axios.get(`/api/boardDetail/${boardId}`).then(res => {
             setBoardData(res.data)
