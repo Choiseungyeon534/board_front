@@ -75,8 +75,9 @@ function BoardPage() {
     const handleTitle = (e) => setTitle(e.target.value);
     const handleContent = (e) => setContent(e.target.value);
 
-
+    console.log(boardTime)
     let timeString_KR = boardTime.toLocaleString("ko-KR", {timeZone: "Asia/Seoul"});
+    console.log(timeString_KR)
     const writeDate = timeString_KR.split('오')[0]
     const writeTime = String(String(boardTime).split(' ')[4]).substring(0,5)
 
