@@ -21,20 +21,12 @@ function Comment({boardId}) {
 
     const commentHandle = (e) => setComment(e.target.value);
 
-    let timeString_KR = replyTime.toLocaleString("ko-KR", {timeZone: "Asia/Seoul"});
-    const writeDate = timeString_KR.split('오')[0]
-    const writeTime = String(String(replyTime).split(' ')[4]).substring(0,5)
-
     useEffect(() => {
         axios.get(`/api/reply/${boardId}`).then(res => {
             setReplyData(res.data)
-            if(res && res.data[0] && res.data.time) {
-                setReplyTime(new Date(res.data[0]?.time))
-            }
         })
     }, [])
 
-    console.log(replyTime)
 
     useEffect(() => {
         axios.get(`/api/reply/${boardId}`).then(res => {
@@ -64,15 +56,22 @@ function Comment({boardId}) {
         <div>
             <input type="text" onChange={commentHandle} placeholder="댓글 쓰기" value={comment}/>
             <button onClick={commentSave}> 작성완료 </button>
-            {replyData.map((reply,index) => (
-                <CommentDiv key={index}>
-                    <div>{reply.writer}</div>
-                    <div>{reply.comment}</div>
-                    <div>{writeDate}<span/>
-                        {writeTime}
-                    </div>
-                </CommentDiv>
-            ))}
+            {replyData.map((reply,index) => {
+                let replyTime = new Date(reply.time);
+                let timeString_KR = replyTime.toLocaleString("ko-KR", {timeZone: "Asia/Seoul"});
+                const writeDate = timeString_KR.split('오')[0]
+                const writeTime = String(String(replyTime).split(' ')[4]).substring(0,5)
+
+                return(
+                    <CommentDiv key={index}>
+                        <div>{reply.writer}</div>
+                        <div>{reply.comment}</div>
+                        <div>{writeDate}&nbsp;
+                            {writeTime}
+                        </div>
+                    </CommentDiv>
+                )
+            })}
         </div>
     )
 }
