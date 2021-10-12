@@ -7,6 +7,11 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'
 import Input from './Input';
 
+const DIV = styled.div`
+      width: 1000px;
+      height: 75vh;
+`;
+
 function Board() {
     const history = useHistory();
     const [boards, setBoards] = useState([]);
@@ -14,18 +19,21 @@ function Board() {
     const [title,setTitle] = useState("");
     const [content,setContent] = useState("");
     const [deleteStatus,setDeleteStatus] = useState(false);
+    const [searchValue,setsearchValue] = useState("");
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
 
-    const handleTitle = (e) => setTitle(e.target.value);
-    const handleContent = (e) => setContent(e.target.value);
+    const handleTitle = (e) => {
+      console.log(e,"title")
+      setTitle(e.target.value)
+    };
+    const handleContent = (e) => {
+      setContent(e.target.value)
+    };
 
-    const DIV = styled.div`
-      width: 1000px;
-      height: 75vh;
-    `;
+    
 
     const saveWriter = () => {
       let body = {
@@ -34,7 +42,6 @@ function Board() {
         content,
       }
       axios.post('/api/boardInput',body).then(res => {
-        console.log(res,"dd")
         if(res.data.status==="성공") {
           setShow(false)
           setTitle("")
@@ -44,13 +51,22 @@ function Board() {
         }
       })
     }
+    
+  useEffect(() => {
+    let body = {
+      title:searchValue
+    }
+    axios.post(`/api/searchTitle/`,body).then(res => {
+      setBoards(res.data)
+    })
+  },[searchValue])
+  
 
-
-    useEffect(() => {
-        axios.get('/api/board/allInfo').then(res => {
-            setBoards(res.data)
-        })
-    },[show,deleteStatus])
+  useEffect(() => {
+      axios.get('/api/board/allInfo').then(res => {
+          setBoards(res.data)
+      })
+  },[show,deleteStatus])
 
     const deleteApi = (e, boardId) => {
       e.stopPropagation()
@@ -58,9 +74,29 @@ function Board() {
         console.log(res.data)
         if(res.data.status==="삭제성공") {
           setDeleteStatus(!deleteStatus)
+          setsearchValue("")
         } else {
           alert("데이터 삭제하는데 실패했다")
         }
+      })
+    }
+    const onKeyUp = (e) => {
+      if(e.keyCode === 13) {
+        if(title === "" || content === "") {
+          alert("입력하세요 무엇인가를")
+        } else {
+          saveWriter()
+        }
+      }
+    }
+
+    const onChangeSearchValue = (e) => {
+      setsearchValue(e.target.value)
+      let body = {
+        title:searchValue
+      }
+      axios.post(`/api/searchTitle/`,body).then(res => {
+        setBoards(res.data)
       })
     }
     
@@ -74,14 +110,14 @@ function Board() {
         show={show}
         onHide={handleClose}
         backdrop="static"
-        keyboard={false}
+        keyboard={true}
       >
         <Modal.Header closeButton>
           <Modal.Title>게시글 작성</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Input type="text" onChange={handleTitle} placeholder="title" value={title}/>
-          <Input type="text" onChange={handleContent} placeholder="content" value={content}/>
+          <Input onKeyUp={onKeyUp} type="text" onChange={handleTitle} placeholder="title" value={title}/>
+          <Input onKeyUp={onKeyUp} type="text" onChange={handleContent} placeholder="content" value={content}/>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
@@ -90,6 +126,7 @@ function Board() {
           <Button onClick={saveWriter} variant="primary">작성 완료</Button>
         </Modal.Footer>
       </Modal>
+      <Input type="text" placeholder="title을입력하세요" onChange={onChangeSearchValue} value={searchValue} />
       <DIV>
         <Table striped hover size="xs" >
           <thead>
@@ -109,9 +146,8 @@ function Board() {
                 <td>{board.TITLE}</td>
                 <td>{board.CONTENT}</td>
                 <td>{board.WRITER}</td>
-                <td style={{background:"#b5c7ed" , color:"white"}} onClick={(e) => deleteApi(e, board.BOARD_ID)}>게시글 삭제하기</td>
+                <td style={{background:"#b5c7ed" , color:"white",cursor:'pointer'}} onClick={(e) => deleteApi(e, board.BOARD_ID)}>게시글 삭제하기</td>
               </tr>
-              {/* <div style={{background:"blue"}} onClick={() => deleteApi(board.BOARD_ID)}>위 게시글 삭제하기</div> */}
               </>
             ))}
           </tbody>
@@ -122,4 +158,3 @@ function Board() {
   }
 
 export default Board
-

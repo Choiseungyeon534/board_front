@@ -33,6 +33,17 @@ function Comment({boardId}) {
         })
     },[commentStatus])
 
+    // const getTime = () => {
+    //     let today = new Date();
+    //     let year = today.getFullYear();
+    //     let month = today.getMonth() +1;
+    //     let date = today.getDate();
+    //     let hours = today.getHours(); 
+    //     let minutes = today.getMinutes(); 
+    //     let time = year+'.'+month+'.'+date+' '+hours+':'+minutes
+    //     return time
+    // }
+
     const commentSave = () => {
         let today = new Date();
         let year = today.getFullYear();
@@ -44,6 +55,7 @@ function Comment({boardId}) {
         let body = {
             writer : "hoonie",
             comment,
+            // time:getTime(),
             time,
             boardId
         }
