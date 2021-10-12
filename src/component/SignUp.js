@@ -59,7 +59,7 @@ const TwitterBackground =
         <Button onClick={onSignUpHandler} content="회원가입하기" />
       </ButtonContainer>
       <Link 
-          to="/" 
+          to="/login" 
           style={{
             textDecoration: 'none',
             textTransform: 'uppercase',
