@@ -17,15 +17,24 @@ function Comment({boardId}) {
     const [replyData, setReplyData] = useState([]);
     const [comment, setComment] = useState("");
     const [commentStatus, setCommentStatus] = useState(false);
+    const [replyTime,setReplyTime] = useState("");
 
     const commentHandle = (e) => setComment(e.target.value);
 
+    let timeString_KR = replyTime.toLocaleString("ko-KR", {timeZone: "Asia/Seoul"});
+    const writeDate = timeString_KR.split('오')[0]
+    const writeTime = String(String(replyTime).split(' ')[4]).substring(0,5)
+
     useEffect(() => {
-           
         axios.get(`/api/reply/${boardId}`).then(res => {
             setReplyData(res.data)
+            if(res && res.data[0] && res.data.time) {
+                setReplyTime(new Date(res.data[0]?.time))
+            }
         })
     }, [])
+
+    console.log(replyTime)
 
     useEffect(() => {
         axios.get(`/api/reply/${boardId}`).then(res => {
@@ -34,17 +43,9 @@ function Comment({boardId}) {
     },[commentStatus])
 
     const commentSave = () => {
-        let today = new Date();
-        let year = today.getFullYear();
-        let month = today.getMonth() +1;
-        let date = today.getDate();
-        let hours = today.getHours(); 
-        let minutes = today.getMinutes(); 
-        let time = year+'.'+month+'.'+date+' '+hours+':'+minutes
         let body = {
             writer : "hoonie",
             comment,
-            time,
             boardId
         }
         
@@ -57,18 +58,19 @@ function Comment({boardId}) {
             }
         })
 
-        }
-    
+    }
 
     return (
         <div>
             <input type="text" onChange={commentHandle} placeholder="댓글 쓰기" value={comment}/>
             <button onClick={commentSave}> 작성완료 </button>
             {replyData.map((reply,index) => (
-                <CommentDiv>
+                <CommentDiv key={index}>
                     <div>{reply.writer}</div>
                     <div>{reply.comment}</div>
-                    <div>{reply.time}</div>
+                    <div>{writeDate}<span/>
+                        {writeTime}
+                    </div>
                 </CommentDiv>
             ))}
         </div>
