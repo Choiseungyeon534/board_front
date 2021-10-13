@@ -99,9 +99,15 @@ function Board() {
         setBoards(res.data)
       })
     }
+    const [id,setId] = useState("");
     
+    useEffect(() => {
+      let id = localStorage.getItem("id")
+      setId(id)
+    },[])
     return (
     <>
+      <div>어서오세요{id}님</div>
       <Button variant="primary" onClick={handleShow}>
           게시글 작성하기
       </Button>

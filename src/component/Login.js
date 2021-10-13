@@ -25,6 +25,7 @@ function Login() {
     }
     axios.post("/api/login",body).then(res => {
       if(res.data.status === "성공") {
+        localStorage.setItem("id",res.data.id)
         history.push('/board');
       } else {
         alert("조회되지않는 아이디또는 비밀번호입니다.");
@@ -49,7 +50,7 @@ function Login() {
       </InputContainer>
       <LoginWith onClick={loginClick}>LOGIN</LoginWith>
       <ButtonContainer>
-        <Button content="Sign up" />
+        <Button onClick={() => history.push('/signup')}  content="Sign up" />
       </ButtonContainer>
       <HorizontalRule />
       <IconsContainer>
